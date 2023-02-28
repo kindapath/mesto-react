@@ -1,6 +1,9 @@
+#root {
+  background-color: #000;
+}
+
 .page {
   max-width: 880px;
-  background-color: #000;
   color: #fff;
   font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
   display: flex;
@@ -8,12 +11,6 @@
   justify-content: center;
   margin: 0 auto 0 auto;
   padding: 45px 200px 60px 200px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
-  -moz-text-size-adjust: 100%;
-  text-rendering: optimizeLegibility;
 }
 
 @media screen and (max-width: 1270px) {
