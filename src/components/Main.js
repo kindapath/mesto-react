@@ -14,7 +14,7 @@ export default function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardCl
     // Получаем изначальную информацию с сервера
     Promise.all([api.getUserInfo(), api.getInitialCards()])
       .then((data) => {
-        // userId = data[0]._id
+        userId = data[0]._id
 
         // Получаем информацию профиля с сервера
         setUserName(data[0].name)
@@ -26,7 +26,7 @@ export default function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardCl
         // cardSection.renderItems(data[1])
       })
       .catch(err => console.log(err))
-  },[])
+  }, [])
   return (
     <main className="content page__content">
       <section className="profile content__profile">
@@ -40,24 +40,9 @@ export default function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardCl
       </section>
       <section className="elements content__elements">
         {cards.map((card) => {
-          return <Card card={card} onCardClick={onCardClick} key={card._id}/>
+          return <Card card={card} onCardClick={onCardClick} key={card._id} />
         })}
       </section>
     </main>
   )
 }
-
-{/* <div className="element">
-            <img className="element__image" src="<%=require('./images/header__logo.svg')%>" alt="" />
-            <button className="element__remove" type="button">
-              <img className="element__remove-image" src="<%=require('./images/element__remove.svg')%>" alt="Иконка удаления" />
-            </button>
-            <div className="element__description">
-              <p className="element__title"></p>
-
-              <div className="element__like-group">
-                <button className="element__like" type="button"></button>
-                <p className="element__like-num">6</p>
-              </div>
-            </div>
-          </div> */}
