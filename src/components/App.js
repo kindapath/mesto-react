@@ -29,10 +29,6 @@ function App() {
     setIsAddPlacePopupOpen(true)
   }
 
-  function handleRemoveIconClick() {
-    setIsConfirmPopupOpen(true)
-  }
-
   function handleCardClick(card) {
     setIsImagePopupOpen(true)
     setSelectedCard(card)
@@ -57,9 +53,22 @@ function App() {
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}>
 
-        <input className="popup__input popup__input_field_name" name="name" type="text" id="name-input" placeholder="Имя" required minLength={2} maxLength={40} autoFocus />
+        <input
+          className="popup__input popup__input_field_name"
+          name="name" type="text"
+          id="name-input"
+          placeholder="Имя"
+          required minLength={2}
+          maxLength={40}
+          autoFocus />
         <span className="popup__input-error name-input-error" />
-        <input className="popup__input popup__input_field_job" name="about" type="text" id="job-input" placeholder="Описание" required minLength={2} maxLength={200} />
+        <input className="popup__input popup__input_field_job"
+          name="about"
+          type="text"
+          id="job-input"
+          placeholder="Описание"
+          required minLength={2}
+          maxLength={200} />
         <span className="popup__input-error job-input-error" />
 
       </PopupWithForm>

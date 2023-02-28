@@ -1,3 +1,5 @@
+// Хедер
+
 function Header() {
   return (
     <header className="header page__header">

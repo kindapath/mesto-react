@@ -1,5 +1,7 @@
 import closeImage from '../images/popup__close-icon.svg'
 
+// Попап с формой
+
 export default function PopupWithForm({ name, title, isOpen, onClose, children }) {
   return (
     <section className={`popup popup_type_${name} ${isOpen ? "popup_opened" : ''}`} >

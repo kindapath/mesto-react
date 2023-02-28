@@ -1,5 +1,6 @@
 import closeImage from '../images/popup__close-icon.svg'
 
+// Попап с картинкой
 export default function ImagePopup({ card, onClose, isOpen }) {
   return (
     <section className={`popup popup_type_pic ${isOpen ? "popup_opened" : ''}`}>

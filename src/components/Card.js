@@ -1,5 +1,7 @@
 import removeImage from '../images/element__remove.svg'
 
+// Карточка
+
 export default function Card({ card, onCardClick }) {
 
   function handleClick() {
