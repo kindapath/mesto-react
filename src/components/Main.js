@@ -1,4 +1,4 @@
-import React from "react"
+import { useEffect, useState } from 'react'
 import { api } from "../utils/api"
 import Card from "./Card"
 
@@ -7,23 +7,23 @@ import Card from "./Card"
 export default function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
 
   // Стейты
-  const [userName, setUserName] = React.useState()
-  const [userDescription, setUserDescription] = React.useState()
-  const [userAvatar, setUserAvatar] = React.useState()
-  const [cards, setCards] = React.useState([])
+  const [userName, setUserName] = useState('')
+  const [userDescription, setUserDescription] = useState('')
+  const [userAvatar, setUserAvatar] = useState('')
+  const [cards, setCards] = useState([])
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Получаем изначальную информацию с сервера
     Promise.all([api.getUserInfo(), api.getInitialCards()])
-      .then((data) => {
+      .then(([userData, cardsData]) => {
 
         // Получаем информацию профиля с сервера
-        setUserName(data[0].name)
-        setUserDescription(data[0].about)
-        setUserAvatar(data[0].avatar)
+        setUserName(userData.name)
+        setUserDescription(userData.about)
+        setUserAvatar(userData.avatar)
 
         // Получаем массив карточек
-        setCards(data[1])
+        setCards(cardsData)
       })
       .catch(err => console.log(err))
   }, [])

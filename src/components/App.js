@@ -1,4 +1,4 @@
-import React from "react";
+import { useEfffect, useState } from 'react'
 import Footer from "./Footer";
 import Header from "./Header";
 import ImagePopup from "./ImagePopup";
@@ -8,13 +8,13 @@ import PopupWithForm from "./PopupWithForm";
 
 function App() {
 
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false)
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false)
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false)
-  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = React.useState(false)
-  const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false)
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
+  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false)
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false)
 
-  const [selectedCard, setSelectedCard] = React.useState({})
+  const [selectedCard, setSelectedCard] = useState({})
 
 
   function handleEditAvatarClick() {
@@ -50,8 +50,10 @@ function App() {
       <PopupWithForm
         name="edit"
         title="Редактировать профиль?"
+        buttonText="Сохранить"
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}>
+
 
         <input
           className="popup__input popup__input_field_name"
@@ -76,6 +78,7 @@ function App() {
       <PopupWithForm
         name="add"
         title="Новое место"
+        buttonText="Создать"
         isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}>
         <input
@@ -101,6 +104,7 @@ function App() {
       <PopupWithForm
         name="avatar"
         title="Обновить аватар"
+        buttonText="Сохранить"
         isOpen={isEditAvatarPopupOpen}
         onClose={closeAllPopups}>
         <input
@@ -116,6 +120,7 @@ function App() {
       <PopupWithForm
         name="confirm"
         title="Вы уверены?"
+        buttonText="Да"
         isOpen={isConfirmPopupOpen}
         onClose={closeAllPopups}>
       </PopupWithForm>
