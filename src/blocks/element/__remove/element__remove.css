@@ -14,3 +14,11 @@
 .element__remove:hover {
   opacity: .6;
 }
+
+.element__remove_visible {
+  visibility: visible;
+}
+
+.element__remove_hidden {
+  visibility: hidden;
+}
