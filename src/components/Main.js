@@ -49,6 +49,17 @@ export default function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardCl
 
   }
 
+  function handleCardDelete(card) {
+    api.removeCard(card._id)
+      .then((newCard) => {
+      // Формируем новый массив на основе имеющегося, подставляя в него новую карточку
+      const newCards = cards.filter((c) => c._id !== card._id);
+      // Обновляем стейт
+      setCards(newCards);
+    })
+    console.log('deeeleeete')
+  }
+
   return (
     <main className="content page__content">
       <section className="profile content__profile">
@@ -65,7 +76,7 @@ export default function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardCl
         {/* Создаем карточки */}
 
         {cards.map((card) => {
-          return <Card card={card} onCardClick={onCardClick} key={card._id} onCardLike={handleCardLike} />
+          return <Card card={card} onCardClick={onCardClick} key={card._id} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
         })}
       </section>
     </main>

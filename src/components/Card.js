@@ -5,7 +5,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext'
 
 // Карточка
 
-export default function Card({ card, onCardClick, onCardLike }) {
+export default function Card({ card, onCardClick, onCardLike, onCardDelete }) {
 
   const currentUser = useContext(CurrentUserContext);
 
@@ -31,9 +31,13 @@ export default function Card({ card, onCardClick, onCardLike }) {
     onCardLike(card)
   }
 
+  function handleDeleteClick () {
+    onCardDelete(card)
+  }
+
   return <div className="element">
     <img className="element__image" src={card.link} onClick={handleClick} alt="" />
-    <button className={cardDeleteButtonClassName} type="button">
+    <button className={cardDeleteButtonClassName} onClick={handleDeleteClick} type="button">
       <img className="element__remove-image" src={removeImage} alt="Иконка удаления" />
     </button>
     <div className="element__description">
