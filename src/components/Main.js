@@ -1,64 +1,21 @@
-import { useEffect, useState, useContext } from 'react'
-import { api } from "../utils/api"
+import { useContext } from 'react'
 import Card from "./Card"
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
 
 // Мейн
 
-export default function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
-
-  // Стейты
-  const [cards, setCards] = useState([])
+export default function Main({
+  onEditAvatar,
+  onEditProfile,
+  onAddPlace,
+  onCardClick,
+  onCardLike,
+  onCardDelete,
+  cards
+}) {
 
   // Подписываемся на контекст
   const currentUser = useContext(CurrentUserContext);
-
-  useEffect(() => {
-    // Получаем изначальную информацию с сервера
-    api.getInitialCards()
-      .then((cardsData) => {
-
-        // Получаем массив карточек
-        setCards(cardsData)
-      })
-      .catch(err => console.log(err))
-  }, [])
-
-  function handleCardLike(card) {
-    // Снова проверяем, есть ли уже лайк на этой карточке
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
-
-    // Отправляем запрос в API и получаем обновлённые данные карточки
-    if (isLiked) {
-      api.removeLike(card._id)
-        .then((newCard) => {
-          // Формируем новый массив на основе имеющегося, подставляя в него новую карточку
-          const newCards = cards.map((c) => c._id === card._id ? newCard : c);
-          // Обновляем стейт
-          setCards(newCards);
-        });
-    } else {
-      api.likeCard(card._id)
-        .then((newCard) => {
-          // Формируем новый массив на основе имеющегося, подставляя в него новую карточку
-          const newCards = cards.map((c) => c._id === card._id ? newCard : c);
-          // Обновляем стейт
-          setCards(newCards);
-        });
-    }
-
-  }
-
-  function handleCardDelete(card) {
-    api.removeCard(card._id)
-      .then((newCard) => {
-      // Формируем новый массив на основе имеющегося, подставляя в него новую карточку
-      const newCards = cards.filter((c) => c._id !== card._id);
-      // Обновляем стейт
-      setCards(newCards);
-    })
-    console.log('deeeleeete')
-  }
 
   return (
     <main className="content page__content">
@@ -76,7 +33,12 @@ export default function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardCl
         {/* Создаем карточки */}
 
         {cards.map((card) => {
-          return <Card card={card} onCardClick={onCardClick} key={card._id} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
+          return <Card
+            card={card}
+            key={card._id}
+            onCardClick={onCardClick}
+            onCardLike={onCardLike}
+            onCardDelete={onCardDelete} />
         })}
       </section>
     </main>
