@@ -12,6 +12,7 @@
   justify-content: center;
   margin: 0 auto 0 auto;
   padding: 45px 200px 60px 200px;
+  min-height: 100vh;
 }
 
 @media screen and (max-width: 1270px) {

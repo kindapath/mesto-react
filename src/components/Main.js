@@ -1,40 +1,30 @@
-import { useEffect, useState } from 'react'
-import { api } from "../utils/api"
+import { useContext } from 'react'
 import Card from "./Card"
+import { CurrentUserContext } from '../contexts/CurrentUserContext'
 
 // Мейн
 
-export default function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
+export default function Main({
+  onEditAvatar,
+  onEditProfile,
+  onAddPlace,
+  onCardClick,
+  onCardLike,
+  onCardDelete,
+  cards
+}) {
 
-  // Стейты
-  const [userName, setUserName] = useState('')
-  const [userDescription, setUserDescription] = useState('')
-  const [userAvatar, setUserAvatar] = useState('')
-  const [cards, setCards] = useState([])
+  // Подписываемся на контекст
+  const currentUser = useContext(CurrentUserContext);
 
-  useEffect(() => {
-    // Получаем изначальную информацию с сервера
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
-      .then(([userData, cardsData]) => {
-
-        // Получаем информацию профиля с сервера
-        setUserName(userData.name)
-        setUserDescription(userData.about)
-        setUserAvatar(userData.avatar)
-
-        // Получаем массив карточек
-        setCards(cardsData)
-      })
-      .catch(err => console.log(err))
-  }, [])
   return (
     <main className="content page__content">
       <section className="profile content__profile">
-        <div className="profile__avatar-hover" onClick={onEditAvatar}><img className="profile__avatar" src={userAvatar} alt="Фотография профиля" /></div>
+        <div className="profile__avatar-hover" onClick={onEditAvatar}><img className="profile__avatar" src={currentUser.avatar} alt="Фотография профиля" /></div>
         <div className="profile__info">
-          <h1 className="profile__name">{userName}</h1>
+          <h1 className="profile__name">{currentUser.name}</h1>
           <button className="profile__edit-btn" onClick={onEditProfile} type="button" />
-          <p className="profile__job">{userDescription}</p>
+          <p className="profile__job">{currentUser.about}</p>
         </div>
         <button className="profile__add-btn" onClick={onAddPlace} type="button" />
       </section>
@@ -43,7 +33,12 @@ export default function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardCl
         {/* Создаем карточки */}
 
         {cards.map((card) => {
-          return <Card card={card} onCardClick={onCardClick} key={card._id} />
+          return <Card
+            card={card}
+            key={card._id}
+            onCardClick={onCardClick}
+            onCardLike={onCardLike}
+            onCardDelete={onCardDelete} />
         })}
       </section>
     </main>
