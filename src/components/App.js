@@ -9,6 +9,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
+import useValidation from './useValidation';
 
 
 function App() {
@@ -20,6 +21,11 @@ function App() {
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false)
 
   const [selectedCard, setSelectedCard] = useState({})
+
+  const {
+    values,
+    resetValidation,
+  } = useValidation();
 
   const [currentUser, setCurrentUser] = useState('')
 
@@ -70,7 +76,6 @@ function App() {
         // Обновляем стейт
         setCards(newCards);
       })
-    console.log('deeeleeete')
   }
 
   useEffect(() => {
@@ -107,7 +112,6 @@ function App() {
         setCurrentUser(userData)
       })
     closeAllPopups()
-    console.log('submit')
   }
 
   function handleUpdateAvatar(avatar) {
@@ -123,7 +127,6 @@ function App() {
       .then((newCard) => {
         setCards([...cards, newCard]);
       })
-    console.log('new card added')
   }
 
   function closeAllPopups() {

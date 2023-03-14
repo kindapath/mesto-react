@@ -19,7 +19,7 @@ export default function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
     isOpen={isOpen}
     onClose={onClose}
     onSubmit={handleSubmit}
-    >
+    formValid={true}>
     <input
       ref={avatarRef}
       className="popup__input popup__input_field_link"

@@ -1,20 +1,24 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import PopupWithForm from "./PopupWithForm";
+import useValidation from "./useValidation";
 
 export default function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
 
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+  const {
+    values,
+    error,
+    onChange,
+    resetValidation,
+    formValid
+  } = useValidation();
 
   // Подписка на контекст
   const currentUser = useContext(CurrentUserContext);
 
-  // После загрузки текущего пользователя из API
-  // его данные будут использованы в управляемых компонентах.
+  // Вставляем значения из контекста в стейт values
   useEffect(() => {
-    setName(currentUser.name);
-    setDescription(currentUser.about);
+    resetValidation({ name: currentUser.name, about: currentUser.about });
   }, [currentUser]);
 
   function handleSubmit(e) {
@@ -23,19 +27,12 @@ export default function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
 
     // Передаём значения управляемых компонентов во внешний обработчик
     onUpdateUser(
-      name,
-      description,
+      values.name,
+      values.about,
     );
-  }
 
-  function handleNameChange(e) {
-    setName(e.target.value)
+    resetValidation();
   }
-
-  function handleDescriptionChange(e) {
-    setDescription(e.target.value)
-  }
-
 
   return <PopupWithForm
     name="edit"
@@ -43,20 +40,23 @@ export default function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
     buttonText="Сохранить"
     isOpen={isOpen}
     onClose={onClose}
-    onSubmit={handleSubmit}>
+    onSubmit={handleSubmit}
+    formValid={formValid}
+    >
 
     <input
       className="popup__input popup__input_field_name"
-      name="name" type="text"
+      name="name"
+      type="text"
       id="name-input"
       placeholder="Имя"
       required minLength={2}
       maxLength={40}
       autoFocus
-      value={name}
-      onChange={handleNameChange}
+      value={values.name || ''}
+      onChange={onChange}
     />
-    <span className="popup__input-error name-input-error" />
+    <span className={`popup__input-error ${formValid ? '' : 'popup__input-error_active'}  name-input-error`}>{error.name}</span>
 
     <input className="popup__input popup__input_field_job"
       name="about"
@@ -65,10 +65,10 @@ export default function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
       placeholder="Описание"
       required minLength={2}
       maxLength={200}
-      value={description}
-      onChange={handleDescriptionChange}
+      value={values.about || ''}
+      onChange={onChange}
     />
-    <span className="popup__input-error job-input-error" />
+    <span className={`popup__input-error ${formValid ? '' : 'popup__input-error_active'}  job-input-error`}>{error.about}</span>
 
   </PopupWithForm>
 }
