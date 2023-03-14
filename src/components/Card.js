@@ -31,22 +31,24 @@ export default function Card({ card, onCardClick, onCardLike, onCardDelete }) {
     onCardLike(card)
   }
 
-  function handleDeleteClick () {
+  function handleDeleteClick() {
     onCardDelete(card)
   }
 
-  return <div className="element">
-    <img className="element__image" src={card.link} onClick={handleClick} alt="" />
-    <button className={cardDeleteButtonClassName} onClick={handleDeleteClick} type="button">
-      <img className="element__remove-image" src={removeImage} alt="Иконка удаления" />
-    </button>
-    <div className="element__description">
-      <p className="element__title">{card.name}</p>
+  return (
+    <div className="element">
+      <img className="element__image" src={card.link} onClick={handleClick} alt={card.name} />
+      <button className={cardDeleteButtonClassName} onClick={handleDeleteClick} type="button">
+        <img className="element__remove-image" src={removeImage} alt="Иконка удаления" />
+      </button>
+      <div className="element__description">
+        <p className="element__title">{card.name}</p>
 
-      <div className="element__like-group">
-        <button className={cardLikeButtonClassName} onClick={handleLikeClick} type="button"></button>
-        <p className="element__like-num">{card.likes.length}</p>
+        <div className="element__like-group">
+          <button className={cardLikeButtonClassName} onClick={handleLikeClick} type="button"></button>
+          <p className="element__like-num">{card.likes.length}</p>
+        </div>
       </div>
     </div>
-  </div>
+  )
 }

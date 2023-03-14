@@ -1,7 +1,8 @@
 import PopupWithForm from "./PopupWithForm";
-import useValidation from "./useValidation";
+import useValidation from "../hooks/useValidation";
+import { useEffect } from "react";
 
-export default function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
+export default function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
 
   const {
     values,
@@ -11,6 +12,10 @@ export default function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
     formValid
   } = useValidation();
 
+  useEffect(() => {
+    resetValidation();
+  }, [isOpen])
+
   function handleClose() {
     onClose()
     resetValidation()
@@ -19,40 +24,40 @@ export default function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
   function handleSubmit(e) {
     e.preventDefault();
     onAddPlace(values.name, values.link)
-    resetValidation()
-    onClose()
   }
 
-  return <PopupWithForm
-    name="add"
-    title="Новое место"
-    buttonText="Создать"
-    isOpen={isOpen}
-    onClose={handleClose}
-    onSubmit={handleSubmit}
-    formValid={formValid}
+  return (
+    <PopupWithForm
+      name="add"
+      title="Новое место"
+      buttonText={isLoading? 'Создание...' : 'Создать'}
+      isOpen={isOpen}
+      onClose={handleClose}
+      onSubmit={handleSubmit}
+      formValid={formValid}
     >
-    <input
-      className="popup__input popup__input_field_title"
-      name="name"
-      type="text"
-      id="title-input"
-      placeholder="Название"
-      minLength={1}
-      maxLength={30}
-      required
-      value={values.name || ''}
-      onChange={onChange}/>
-    <span className={`popup__input-error ${formValid ? '' : 'popup__input-error_active'} title-input-error`}>{error.name}</span>
-    <input
-      className="popup__input popup__input_field_link"
-      name="link"
-      type="url"
-      id="link-input"
-      placeholder="Ссылка на картинку"
-      required
-      value={values.link || ''}
-      onChange={onChange}/>
-    <span className={`popup__input-error ${formValid ? '' : 'popup__input-error_active'} link-input-error`}>{error.link}</span>
-  </PopupWithForm>
+      <input
+        className="popup__input popup__input_field_title"
+        name="name"
+        type="text"
+        id="title-input"
+        placeholder="Название"
+        minLength={1}
+        maxLength={30}
+        required
+        value={values.name || ''}
+        onChange={onChange} />
+      <span className={`popup__input-error ${formValid ? '' : 'popup__input-error_active'} title-input-error`}>{error.name}</span>
+      <input
+        className="popup__input popup__input_field_link"
+        name="link"
+        type="url"
+        id="link-input"
+        placeholder="Ссылка на картинку"
+        required
+        value={values.link || ''}
+        onChange={onChange} />
+      <span className={`popup__input-error ${formValid ? '' : 'popup__input-error_active'} link-input-error`}>{error.link}</span>
+    </PopupWithForm>
+  )
 }

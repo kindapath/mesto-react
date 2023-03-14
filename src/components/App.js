@@ -9,7 +9,6 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
-import useValidation from './useValidation';
 
 
 function App() {
@@ -22,12 +21,25 @@ function App() {
 
   const [selectedCard, setSelectedCard] = useState({})
 
-  const {
-    values,
-    resetValidation,
-  } = useValidation();
+  const [currentUser, setCurrentUser] = useState({})
 
-  const [currentUser, setCurrentUser] = useState('')
+  const [isLoading, setIsLoading] = useState(false);
+
+  const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isImagePopupOpen
+
+  useEffect(() => {
+    function closeByEscape(evt) {
+      if (evt.key === 'Escape') {
+        closeAllPopups();
+      }
+    }
+    if (isOpen) { // навешиваем только при открытии
+      document.addEventListener('keydown', closeByEscape);
+      return () => {
+        document.removeEventListener('keydown', closeByEscape);
+      }
+    }
+  }, [isOpen])
 
   // Стейты
   const [cards, setCards] = useState([])
@@ -55,27 +67,29 @@ function App() {
           const newCards = cards.map((c) => c._id === card._id ? newCard : c);
           // Обновляем стейт
           setCards(newCards);
-        });
+        })
+        .catch(err => console.log(err))
     } else {
       api.likeCard(card._id)
         .then((newCard) => {
           // Формируем новый массив на основе имеющегося, подставляя в него новую карточку
           const newCards = cards.map((c) => c._id === card._id ? newCard : c);
           // Обновляем стейт
-          setCards(newCards);
-        });
+          setCards(newCards)
+        })
+        .catch(err => console.log(err))
     }
 
   }
 
   function handleCardDelete(card) {
     api.removeCard(card._id)
-      .then((newCard) => {
+      .then(() => {
         // Формируем новый массив на основе имеющегося, подставляя в него новую карточку
-        const newCards = cards.filter((c) => c._id !== card._id);
         // Обновляем стейт
-        setCards(newCards);
+        setCards((state) => state.filter((item) => item._id !== card._id));
       })
+      .catch(err => console.log(err))
   }
 
   useEffect(() => {
@@ -107,25 +121,41 @@ function App() {
   }
 
   function handleUpdateUser(name, about) {
+    setIsLoading(true)
     api.updateUserInfo(name, about)
       .then((userData) => {
         setCurrentUser(userData)
+        closeAllPopups()
       })
-    closeAllPopups()
+      .catch(err => console.log(err))
+      .finally(() => {
+        setIsLoading(false)
+      })
   }
 
   function handleUpdateAvatar(avatar) {
+    setIsLoading(true)
     api.updateAvatar(avatar)
       .then((userData) => {
         setCurrentUser(userData)
+        closeAllPopups()
       })
-    closeAllPopups()
+      .catch(err => console.log(err))
+      .finally(() => {
+        setIsLoading(false)
+      })
   }
 
   function handleAddPlaceSubmit(name, link) {
+    setIsLoading(true)
     api.addCard(name, link)
       .then((newCard) => {
         setCards([...cards, newCard]);
+        closeAllPopups()
+      })
+      .catch(err => console.log(err))
+      .finally(() => {
+        setIsLoading(false)
       })
   }
 
@@ -147,27 +177,30 @@ function App() {
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
+          isLoading={isLoading}
         />
 
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
+          isLoading={isLoading}
         />
 
         <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           onAddPlace={handleAddPlaceSubmit}
-          />
+          isLoading={isLoading}
+        />
 
         <PopupWithForm
           name="confirm"
           title="Вы уверены?"
           buttonText="Да"
           isOpen={isConfirmPopupOpen}
-          onClose={closeAllPopups}>
-        </PopupWithForm>
+          onClose={closeAllPopups}
+        />
 
         <ImagePopup
           card={selectedCard}
